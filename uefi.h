@@ -1,6 +1,8 @@
 #ifndef UEFI_H
 #define UEFI_H
 
+#include <stdint.h>
+
 // Unified Extensible Firmware Interface (UEFI)
 // Release 2.10
 
@@ -13,25 +15,25 @@
 
 // DATA TYPES
 
-#define TRUE  		        1
-#define FALSE 		        0
+#define TRUE  		1
+#define FALSE 		0
 
-#define EFI_SUCCESS	        0
+#define EFI_SUCCESS	0
 
-typedef unsigned char		BOOLEAN;
-typedef signed long int		INTN;
-typedef unsigned long int	UINTN;
-typedef signed char		INT8;
-typedef unsigned char		UINT8;
-typedef signed short int	INT16;
-typedef unsigned short int	UINT16;
-typedef signed int		INT32;
-typedef unsigned int		UINT32;
-typedef signed long int 	INT64;
-typedef unsigned long int	UINT64;
-typedef unsigned char		CHAR8;
-typedef unsigned short int	CHAR16;
-typedef void			VOID;
+typedef int8_t   	BOOLEAN;
+typedef int64_t		INTN;
+typedef uint64_t	UINTN;
+typedef int8_t		INT8;
+typedef uint8_t	        UINT8;
+typedef int16_t	        INT16;
+typedef uint16_t	UINT16;
+typedef int32_t         INT32;
+typedef uint32_t        UINT32;
+typedef int64_t         INT64;
+typedef uint64_t        UINT64;
+typedef uint8_t         CHAR8;
+typedef uint16_t        CHAR16;
+typedef void		VOID;
 
 typedef UINTN			EFI_STATUS;
 typedef VOID*			EFI_HANDLE;
@@ -47,7 +49,7 @@ typedef struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_RESET)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN BOOLEAN ExtendedVerification);
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_STRING)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN CHAR16 *String);
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_TEST_STRING)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN CHAR16 *String);
-typedef EFI_STATUS (EFIAPI *EFI_TEXT_QUERY_MODE)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN UINTN ModeNumber, OUT UINTN *Columns, OUT UINTN *Rows);
+typedef EFI_STATUS (EFIAPI *EFI_TEXT_QUERY_MODE)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN UINTN ModeNumber, OUT UINTN* Columns, OUT UINTN* Rows);
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_SET_MODE)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN UINTN ModeNumber);
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_SET_ATTRIBUTE)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, IN UINTN ATTRIBUTE);
 typedef EFI_STATUS (EFIAPI *EFI_TEXT_CLEAR_SCREEN)(IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This);
