@@ -4,7 +4,7 @@ LD = lld-link
 CFLAGS = -I../ -Wall -fshort-wchar -mno-red-zone -fno-stack-protector -target x86_64-pc-win32-coff 
 LFLAGS = -subsystem:efi_application -nodefaultlib -entry:efi_main
 
-TARGET = hello-world.efi
+TARGET = $(patsubst %.c,%.efi,$(wildcard *.c))
 
 all: $(TARGET)
 
