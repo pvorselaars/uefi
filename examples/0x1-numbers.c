@@ -77,6 +77,8 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 	OutputNewline(StdOut);
 	OutputInt(StdOut, 0xabcd, BASE_16);
 	OutputNewline(StdOut);
+	OutputInt(StdOut, 0xdeadbeef, BASE_16);
+	OutputNewline(StdOut);
 
 	return EFI_SUCCESS;
 }
