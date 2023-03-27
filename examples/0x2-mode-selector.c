@@ -5,6 +5,10 @@
 #define BASE_2	2
 #define NEWLINE L"\r\n"
 
+EFI_STATUS Output(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, CHAR16* String){
+	return Con->OutputString(Con, String);
+}
+
 EFI_STATUS Reverse(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, CHAR16* buffer, INTN index){
 
 	INTN i = 0;
@@ -15,7 +19,7 @@ EFI_STATUS Reverse(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, CHAR16* buffer, INTN in
 
 	reverse[i] = 0;
 	
-	return Con->OutputString(Con, reverse);
+	return Output(Con, reverse);
 }
 
 EFI_STATUS IntToUnicode(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, INTN Value, INTN Base){
@@ -58,27 +62,38 @@ EFI_STATUS OutputInt(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, INTN Value, INTN Base
 }
 
 EFI_STATUS OutputNewline(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con){
-	return Con->OutputString(Con, NEWLINE);
+	return Output(Con, NEWLINE);
 }
 
 EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 
 	EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* StdOut = SystemTable->ConOut;
 
-	OutputInt(StdOut, -100, BASE_10);
-	OutputNewline(StdOut);
-	OutputInt(StdOut, 100, BASE_10);
-	OutputNewline(StdOut);
-	OutputInt(StdOut, 12345, BASE_10);
-	OutputNewline(StdOut);
-	OutputInt(StdOut, 5, BASE_2);
-	OutputNewline(StdOut);
-	OutputInt(StdOut, 0x1234, BASE_16);
-	OutputNewline(StdOut);
-	OutputInt(StdOut, 0xabcd, BASE_16);
-	OutputNewline(StdOut);
-	OutputInt(StdOut, 0xdeadbeef, BASE_16);
-	OutputNewline(StdOut);
+	UINTN Columns;
+	UINTN Rows;
+	EFI_STATUS Status;
+	UINTN i;
+
+	StdOut->SetMode(StdOut, StdOut->Mode->MaxMode - 1);
+	
+	for(i = 0; i < StdOut->Mode->MaxMode; i++){
+		Status = StdOut->QueryMode(StdOut, i, &Columns, &Rows);
+
+		if(Status == EFI_SUCCESS){
+			if(StdOut->Mode->Mode == i) {
+				Output(StdOut, L"*");
+			} else {
+				Output(StdOut, L" ");
+			}
+			OutputInt(StdOut, i, BASE_10);
+			Output(StdOut, L": ");
+			OutputInt(StdOut, Columns, BASE_10);
+			Output(StdOut, L"x");
+			OutputInt(StdOut, Rows, BASE_10);
+			OutputNewline(StdOut);
+		}
+	}
+
 
 	return EFI_SUCCESS;
 }
