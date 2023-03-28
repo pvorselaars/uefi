@@ -4,7 +4,7 @@
 
 Declarations as specified by [EUFI 2.10](https://uefi.org/specs/UEFI/2.10/) with no external dependencies. These declarations are contained in a single header allowing you to include `<uefi.h>` and build an EFI application for x86_64 hardware with UEFI compliant firmware.
 
-NOTE: Currently, only the data types, System Table and the Simple Text Output Control are implemented. Plan is to implement the entire specification.
+NOTE: Currently, only the data types, System Table, Simple Text Output Control and the Simple Text Input Control are implemented. Plan is to implement the entire specification.
 
 ### Building
 
