@@ -17,7 +17,9 @@
 #define FALSE 		        0
 
 #define EFI_SUCCESS	        0
+#define EFI_INVALID_PARAMETER	2
 #define EFI_UNSUPPORTED	        3
+#define EFI_NOT_READY		6
 #define EFI_DEVICE_ERROR	7
 
 typedef unsigned char		BOOLEAN;
@@ -171,7 +173,29 @@ struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
 
 // Scan codes
 
-#define EFI_ESCAPE 0x17
+#define EFI_NULL 	0x00
+#define EFI_UP_ARROW 	0x01
+#define EFI_DOWN_ARROW 	0x02
+#define EFI_RIGHT_ARROW 0x03
+#define EFI_LEFT_ARROW 	0x04
+#define EFI_HOME 	0x05
+#define EFI_END 	0x06
+#define EFI_INSERT 	0x07
+#define EFI_DELETE 	0x08
+#define EFI_DELETE 	0x08
+#define EFI_PAGE_UP 	0x09
+#define EFI_PAGE_DOWN 	0x0a
+#define EFI_FUNCTION_1 	0x0b
+#define EFI_FUNCTION_2 	0x0c
+#define EFI_FUNCTION_3 	0x0d
+#define EFI_FUNCTION_4 	0x0e
+#define EFI_FUNCTION_5 	0x0f
+#define EFI_FUNCTION_6 	0x10
+#define EFI_FUNCTION_7 	0x11
+#define EFI_FUNCTION_8 	0x12
+#define EFI_FUNCTION_9 	0x13
+#define EFI_FUNCTION_10 0x14
+#define EFI_ESCAPE 	0x17
 
 typedef struct EFI_INPUT_KEY {
 	UINT16 ScanCode;
