@@ -18,6 +18,7 @@
 
 #define EFI_SUCCESS	        0
 #define EFI_UNSUPPORTED	        3
+#define EFI_DEVICE_ERROR	7
 
 typedef unsigned char		BOOLEAN;
 typedef signed char		INT8;
@@ -37,10 +38,13 @@ typedef UINT64			UINTN;
 
 typedef UINTN			EFI_STATUS;
 typedef VOID*			EFI_HANDLE;
+typedef VOID*			EFI_EVENT;
 
 // PROTOCOLS
 
-// Simple Text Protocol
+// CONSOLE PROTOCOLS
+
+// Simple Text Output Protocol
 
 #define EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_GUID { 0x387477c2, 0x69c7, 0x11d2, { 0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b }}
 
@@ -161,6 +165,30 @@ struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
 	EFI_SIMPLE_TEXT_OUTPUT_MODE*	Mode;
 };
 
+// Simple Text Input Protocol
+
+#define EFI_SIMPLE_TEXT_INPUT_PROTOCOL_GUID { 0x387477c1, 0x69c7, 0x11d2, { 0x8e, 0x39, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b }}
+
+// Scan codes
+
+#define EFI_ESCAPE 0x17
+
+typedef struct EFI_INPUT_KEY {
+	UINT16 ScanCode;
+	CHAR16 UnicodeChar;
+} EFI_INPUT_KEY;
+
+typedef struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL EFI_SIMPLE_TEXT_INPUT_PROTOCOL;
+
+typedef EFI_STATUS (EFIAPI *EFI_INPUT_RESET)(IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, IN BOOLEAN ExtendedVerification);
+typedef EFI_STATUS (EFIAPI *EFI_INPUT_READ_KEY)(IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, OUT EFI_INPUT_KEY *Key);
+
+struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
+	EFI_INPUT_RESET		Reset;
+	EFI_INPUT_READ_KEY	ReadKeyStroke;
+	EFI_EVENT		WaitForKey;
+};
+
 // TABLES
 
 #define EFI_SYSTEM_TABLE_SIGNATURE	0x5453595320494249
@@ -194,7 +222,7 @@ typedef struct EFI_SYSTEM_TABLE {
         CHAR16*				        FirmwareVendor;
         UINT32 				        FirmwareRevision;
         EFI_HANDLE		                ConsoleInHandle;
-        UINT64		                        ConIn;
+        EFI_SIMPLE_TEXT_INPUT_PROTOCOL*         ConIn;
         EFI_HANDLE		                ConsoleOutHandle;
         EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*	ConOut;
         EFI_HANDLE		         	StandardErrorHandle;
