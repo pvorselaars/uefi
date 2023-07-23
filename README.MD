@@ -16,32 +16,10 @@ Building applications using this header is currently only tested using [`clang`]
 
 ### Testing
 
-Running EFI applications requires a disk with a FAT32 formatted EFI System partition which contains the EFI binaries. For example: 
+Running EFI applications requires a disk with a FAT32 formatted EFI System partition which contains the EFI binaries. See `Makefile` in the root folder for details.
 
 ```
-# dd if=/dev/zero of=disk.img bs=1M count=48
-
-# gdisk disk.img <<EOF
-o
-y
-n
-
-
-
-ef00
-w
-y
-EOF
-
-# losetup -Pf disk.img
-
-# mkdosfs -F32 /dev/loop0p1
-
-# mount /dev/loop0p1 /mnt
-
-# cp hello-world.efi /mnt
-
-# qemu-system-x86_64 -bios /usr/share/ovmf/OVMF.fd -hda disk.img -net none
+# make
 
 UEFI Interactive Shell v2.2
 EDK II
@@ -71,16 +49,14 @@ FS0:\>
 Testing on real hardware follows a similar procedure:
 
 ```
-# gdisk /dev/sdX <<EOF
-o
-y
+# fdisk /dev/sdX <<EOF
 n
+p
 
 
-
-ef00
+t
+ef
 w
-y
 EOF
 
 # mkdosfs -F32 /dev/sdX1
