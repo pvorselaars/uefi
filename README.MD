@@ -46,28 +46,6 @@ Hello, World!
 FS0:\>
 ```
 
-Testing on real hardware follows a similar procedure:
-
-```
-# fdisk /dev/sdX <<EOF
-n
-p
-
-
-t
-ef
-w
-EOF
-
-# mkdosfs -F32 /dev/sdX1
-
-# mount /dev/sdX1 /mnt
-
-# cp hello-world.efi /mnt
-```
-
-When the hardware does not expose the EFI shell, copy the EFI application to `/mnt/EFI/BOOT/BOOTx64.EFI` to auto start the application when booting from the disk.
-
 ### Acknowledgements
 
 Inspired by
