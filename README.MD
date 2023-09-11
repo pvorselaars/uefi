@@ -6,17 +6,9 @@ Declarations as specified by [EUFI 2.10](https://uefi.org/specs/UEFI/2.10/) with
 
 NOTE: Currently, only the data types, System Table, Simple Text Output Control and the Simple Text Input Control are implemented. Plan is to implement the entire specification.
 
-### Building
+### Building & testing
 
-Building applications using this header is currently only tested using [`clang`](https://clang.llvm.org) and [`lld`](https://lld.llvm.org). Both `clang` and `lld` require specific flags to compile and link an EFI binary, see `Makefile` in the `examples` directory for details.
-
-```
-# cd examples && make
-```
-
-### Testing
-
-Running EFI applications requires a disk with a FAT32 formatted EFI System partition which contains the EFI binaries. See `Makefile` in the root folder for details.
+Building applications using this header is currently only tested using [`clang`](https://clang.llvm.org) and [`lld`](https://lld.llvm.org). Both `clang` and `lld` require specific flags to compile and link an EFI binary.
 
 ```
 # make
@@ -37,11 +29,11 @@ Press ESC in 5 seconds to skip startup.nsh or any other key to continue.
 Shell> fs0:
 FS0:\> ls
 Directory of: FS0:\
-03/23/2023  19:48               2,560  hello-world.efi
+03/23/2023  19:48               2,560  0x0-hello-world.efi
 03/23/2023  19:48              10,549  NvVars
           2 File(s)      13,109 bytes
           0 Dir(s)
-FS0:\> hello-world.efi
+FS0:\> 0x0-hello-world.efi
 Hello, World!
 FS0:\>
 ```
