@@ -57,8 +57,8 @@ EFI_STATUS OutputInt(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, INTN Value, INTN Base
 	return IntToUnicode(Con, Value, Base);
 }
 
-EFI_STATUS OutputNewline(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con){
-	return Con->OutputString(Con, NEWLINE);
+EFI_STATUS Output(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, CHAR16 *String){
+	return Con->OutputString(Con, String);
 }
 
 EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
@@ -66,19 +66,25 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 	EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* StdOut = SystemTable->ConOut;
 
 	OutputInt(StdOut, -100, BASE_10);
-	OutputNewline(StdOut);
+	Output(StdOut, NEWLINE);
+
 	OutputInt(StdOut, 100, BASE_10);
-	OutputNewline(StdOut);
+	Output(StdOut, NEWLINE);
+
 	OutputInt(StdOut, 12345, BASE_10);
-	OutputNewline(StdOut);
+	Output(StdOut, NEWLINE);
+
 	OutputInt(StdOut, 5, BASE_2);
-	OutputNewline(StdOut);
+	Output(StdOut, NEWLINE);
+
 	OutputInt(StdOut, 0x1234, BASE_16);
-	OutputNewline(StdOut);
+	Output(StdOut, NEWLINE);
+
 	OutputInt(StdOut, 0xabcd, BASE_16);
-	OutputNewline(StdOut);
+	Output(StdOut, NEWLINE);
+
 	OutputInt(StdOut, 0xdeadbeef, BASE_16);
-	OutputNewline(StdOut);
+	Output(StdOut, NEWLINE);
 
 	return EFI_SUCCESS;
 }
