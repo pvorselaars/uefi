@@ -215,7 +215,9 @@ struct EFI_SIMPLE_TEXT_INPUT_PROTOCOL {
 	EFI_EVENT		WaitForKey;
 };
 
-// SYSTEM TABLE
+//
+// TABLE HEADER
+//
 
 #define EFI_SYSTEM_TABLE_SIGNATURE	0x5453595320494249
 #define EFI_2_100_SYSTEM_TABLE_REVISION	((2<<16) | (100))
@@ -243,6 +245,76 @@ typedef struct EFI_TABLE_HEADER {
         UINT32 Reserved;
 } EFI_TABLE_HEADER;
 
+//
+// SERVICES
+//
+
+// Boot Services
+
+typedef EFI_STATUS (EFIAPI *EFI_CALCULATE_CRC32)(IN VOID *Data, IN UINTN DataSize, OUT UINT32 *Crc32);
+
+typedef struct EFI_BOOT_SERVICES {
+	EFI_TABLE_HEADER			Hdr;
+
+	UINT64					RaiseTPL;
+	UINT64					RestoreTPL;
+
+	UINT64					AllocatePages;
+	UINT64					FreePages;
+	UINT64					GetMemoryMap;
+	UINT64					AllocatePool;
+	UINT64					FreePool;
+
+	UINT64					CreateEvent;
+	UINT64					SetTimer;
+	UINT64					WaitForEvent;
+	UINT64					SignalEvent;
+	UINT64					CloseEvent;
+	UINT64					CheckEvent;
+
+	UINT64					InstallProtocolInterface;
+	UINT64					ReinstallProtocolInterface;
+	UINT64					UninstalProtocolInterface;
+	UINT64					HandleProtocol;
+	UINT64					Reserved;
+	UINT64					RegisterProtocolNotify;
+	UINT64					LocateHandle;
+	UINT64					LocateDevicePath;
+	UINT64					InstallConfigurationTable;
+
+	UINT64					LoadImage;
+	UINT64					StartImage;
+	UINT64					Exit;
+	UINT64					UnloadImage;
+	UINT64					ExitBootServices;
+
+	UINT64					GetNextMonotonicCount;
+	UINT64					Stall;
+	UINT64					SetWatchdogTimer;
+
+	UINT64					ConnectController;
+	UINT64					DisconnectController;
+
+	UINT64					OpenProtocol;
+	UINT64					CloseProtocol;
+	UINT64					OpenProtocolInformation;
+
+	UINT64					ProtocolsPerHandle;
+	UINT64					LocateHandleBuffer;
+	UINT64					LocateProtocol;
+	UINT64					InstallMultipleProtocolInterfaces;
+	UINT64					UninstallMultipleProtocolInterfaces;
+
+	EFI_CALCULATE_CRC32			CalculateCrc32;
+
+	UINT64					CopyMem;
+	UINT64					SetMem;
+	UINT64					CreateEventEx;
+
+} EFI_BOOT_SERVICES;
+
+// SYSTEM TABLE
+
 typedef struct EFI_SYSTEM_TABLE {
         EFI_TABLE_HEADER		        Hdr;
         CHAR16*				        FirmwareVendor;
@@ -254,7 +326,7 @@ typedef struct EFI_SYSTEM_TABLE {
         EFI_HANDLE		         	StandardErrorHandle;
         EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL*	StdErr;
         UINT64		            	        RuntimeServices;
-        UINT64				        BootServices;
+        EFI_BOOT_SERVICES*		        BootServices;
         UINT64				        NumberOfTableEntries;
         UINT64				        ConfigurationTable;
 } EFI_SYSTEM_TABLE;

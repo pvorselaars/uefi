@@ -63,7 +63,6 @@ EFI_STATUS Output(EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* Con, CHAR16 *String){
 	return Con->OutputString(Con, String);
 }
 
-
 EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 
 	EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* StdOut = SystemTable->ConOut;
@@ -71,10 +70,12 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 	UINT64 Signature = SystemTable->Hdr.Signature;
 	UINTN  Color;
 	UINTN  DefaultColor = EFI_TEXT_ATTR(EFI_LIGHTGRAY, EFI_BLACK);
+	UINTN  ValidColor   = EFI_TEXT_ATTR(EFI_GREEN, EFI_BLACK);
+	UINTN  InvalidColor = EFI_TEXT_ATTR(EFI_RED, EFI_BLACK);
 
 	Output(StdOut, L"Signature:\t\t");
 
-	Color = (Signature == EFI_SYSTEM_TABLE_SIGNATURE) ? EFI_TEXT_ATTR(EFI_GREEN, EFI_BLACK) : EFI_TEXT_ATTR(EFI_RED, EFI_BLACK);
+	Color = (Signature == EFI_SYSTEM_TABLE_SIGNATURE) ? ValidColor : InvalidColor;
 	StdOut->SetAttribute(StdOut, Color);
 
 	OutputInt(StdOut, SystemTable->Hdr.Signature, BASE_16);
@@ -85,7 +86,7 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 	UINT32 SystemTableRevision = SystemTable->Hdr.Revision;
 
 	Output(StdOut, L"Revision:\t\t");
-	Color = (SystemTableRevision == EFI_SYSTEM_TABLE_REVISION) ? EFI_TEXT_ATTR(EFI_GREEN, EFI_BLACK) : EFI_TEXT_ATTR(EFI_RED, EFI_BLACK);
+	Color = (SystemTableRevision == EFI_SYSTEM_TABLE_REVISION) ? ValidColor : InvalidColor;
 	StdOut->SetAttribute(StdOut, Color);
 
 	OutputInt(StdOut, SystemTable->Hdr.Revision >> 16, BASE_10);
@@ -98,7 +99,7 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 	UINT32 HeaderSize = SystemTable->Hdr.HeaderSize;
 
 	Output(StdOut, L"HeaderSize:\t\t");
-	Color = (HeaderSize == sizeof(EFI_SYSTEM_TABLE)) ? EFI_TEXT_ATTR(EFI_GREEN, EFI_BLACK) : EFI_TEXT_ATTR(EFI_RED, EFI_BLACK);
+	Color = (HeaderSize == sizeof(EFI_SYSTEM_TABLE)) ? ValidColor : InvalidColor;
 	StdOut->SetAttribute(StdOut, Color);
 
 	OutputInt(StdOut, SystemTable->Hdr.HeaderSize, BASE_10);
@@ -106,11 +107,22 @@ EFI_STATUS efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable){
 
 	StdOut->SetAttribute(StdOut, DefaultColor);
 
+	UINT32 OriginalCrc32   = SystemTable->Hdr.CRC32;
+	SystemTable->Hdr.CRC32 = 0;
+
+	SystemTable->BootServices->CalculateCrc32(&SystemTable->Hdr, SystemTable->Hdr.HeaderSize, &SystemTable->Hdr.CRC32);
+
 	Output(StdOut, L"CRC:\t\t\t");
-	OutputInt(StdOut, SystemTable->Hdr.CRC32, BASE_16);
-	Output(StdOut, NEWLINE);
+	Color = (OriginalCrc32 == SystemTable->Hdr.CRC32) ? ValidColor : InvalidColor;
+	StdOut->SetAttribute(StdOut, Color);
+	OutputInt(StdOut, OriginalCrc32, BASE_16);
 	Output(StdOut, NEWLINE);
 
+	StdOut->SetAttribute(StdOut, DefaultColor);
+
+	SystemTable->Hdr.CRC32 = OriginalCrc32;
+
+	Output(StdOut, NEWLINE);
 	Output(StdOut, L"FirmwareVendor:\t\t");
 	Output(StdOut, SystemTable->FirmwareVendor);
 	Output(StdOut, NEWLINE);
