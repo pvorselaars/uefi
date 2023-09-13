@@ -10,6 +10,7 @@ NOTE: Currently, only the data types, System Table, Simple Text Output Control a
 
 Building applications using this header is currently only tested using [`clang`](https://clang.llvm.org) and [`lld`](https://lld.llvm.org).
 
+```
 # make
 
 UEFI Interactive Shell v2.2
